@@ -35,7 +35,11 @@ public class RegisterService {
     public RegisterService() {}
 
     public List<Student> retrieveStudentForCourse(String course) {
-        String hql = "select s from Student s, Registration r, Course c where s.id = r.student_id and r.course_id = c.id and c.name = :name";
+        String hql = "select s " +
+                "from Student s, Registration r, Course c " +
+                "where s.id = r.student.id and r.course.id = c.id and c.name = :name " +
+                "and s.isActive = true and r.isActive = true and c.isActive = true" +
+                "order by s.firstName";
         TypedQuery<Student> query = entityManager.createQuery(hql, Student.class);
         query.setParameter("name", course);
         List<Student> students = query.getResultList();

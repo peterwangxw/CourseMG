@@ -23,7 +23,7 @@ public class Course {
     @NotBlank(message = "course name is mandatory")
     private String name;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     Set<Registration> registrations;
 
     @Override

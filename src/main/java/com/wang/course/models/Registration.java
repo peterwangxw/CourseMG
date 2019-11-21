@@ -24,7 +24,7 @@ public class Registration {
     private Course course;
 
     @Column(name = "isActive", nullable = false)
-    private boolean isActive;
+    private boolean isActive = true;
 
     @Override
     public boolean equals(Object obj) {

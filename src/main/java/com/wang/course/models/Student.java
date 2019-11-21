@@ -29,7 +29,7 @@ public class Student {
     @NotBlank(message = "last name is mandatory")
     private String lastName;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     Set<Registration> registrations;
 
     @Override
