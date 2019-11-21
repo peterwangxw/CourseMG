@@ -9,9 +9,9 @@ import com.wang.course.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -35,23 +35,28 @@ public class RegisterService {
     public RegisterService() {}
 
     public List<Student> retrieveStudentForCourse(String course) {
-        // TODO... we should prevent SQL injection here
-        String sql = "select s from Student s, Registration r, Course c where s.id = r.student_id and r.course_id = c.id and c.name = '%s'";
-        TypedQuery<Student> query = entityManager.createQuery(String.format(sql, course), Student.class);
+        String hql = "select s from Student s, Registration r, Course c where s.id = r.student_id and r.course_id = c.id and c.name = :name";
+        TypedQuery<Student> query = entityManager.createQuery(hql, Student.class);
+        query.setParameter("name", course);
         List<Student> students = query.getResultList();
 
         return students;
     }
 
-    public void register(long courseId, long studentId) throws Exception {
-        Course course = courseRepository.getOne(courseId);
-        if (course == null) {
-            throw new Exception("Course isn't found");
+    public void register(long courseId, long studentId) throws EntityNotFoundException {
+        Course course = null;
+        Student student = null;
+
+        try {
+            course = courseRepository.getOne(courseId);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("Course isn't found");
         }
 
-        Student student = studentRepository.getOne(studentId);
-        if (course == null) {
-            throw new Exception("Student isn't found");
+        try {
+            student = studentRepository.getOne(studentId);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("Student isn't found");
         }
 
         Registration registration = new Registration();

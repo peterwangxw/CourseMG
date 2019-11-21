@@ -3,6 +3,7 @@ package com.wang.course.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -19,10 +20,13 @@ public class Student {
 
     @NotNull
     @Size(max = 64)
+
+    @NotBlank(message = "first name is mandatory")
     private String firstName;
 
     @NotNull
     @Size(max = 64)
+    @NotBlank(message = "last name is mandatory")
     private String lastName;
 
     @OneToMany(mappedBy = "course")

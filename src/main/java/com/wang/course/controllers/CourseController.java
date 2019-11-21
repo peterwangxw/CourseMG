@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -27,9 +28,9 @@ public class CourseController extends BaseController{
      */
     @ApiOperation("Create a course")
     @PostMapping("/course")
-    public Course create(@RequestBody Course course) {
+    public Course create(@Valid @RequestBody Course course) {
         try {
-            Course savedCourse = registerService.courseRepository.save(course);
+            Course savedCourse = registerService.courseRepository.saveAndFlush(course);
             return savedCourse;
         } catch (Exception e){
             log.error(e.getMessage());

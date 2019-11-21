@@ -24,7 +24,7 @@ spring.datasource.password=Hanhan123!
 ## Test with Swagger UI
 
 - Open `http://localhost:8080/swagger-ui.html` in your browser, you will see:
-![MacDown Screenshot](http://d.pr/i/10UGP+)
+![MacDown Screenshot](https://i.ibb.co/FD45xBT/RestAPI.png)
 
 #### student-controller
 - `POST "/v1/student"` - create a student with the payload like `{"firstName":"Peter", "lastName":"Wang"}`

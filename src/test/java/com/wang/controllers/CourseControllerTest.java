@@ -68,7 +68,7 @@ public class CourseControllerTest {
                 .content(course)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Is.is("Name is mandatory")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Is.is("course name is mandatory")))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 

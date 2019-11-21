@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -27,9 +29,9 @@ public class StudentController extends BaseController{
      */
     @ApiOperation("Create a student")
     @PostMapping("/student")
-    public Student create(@RequestBody Student student) {
+    public Student create(@Valid @RequestBody Student student) {
         try {
-            Student savedStudent = registerService.studentRepository.save(student);
+            Student savedStudent = registerService.studentRepository.saveAndFlush(student);
             return savedStudent;
         } catch (Exception e){
             log.error(e.getMessage());
