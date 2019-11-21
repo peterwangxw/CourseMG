@@ -29,8 +29,11 @@ public class Student {
     @NotBlank(message = "last name is mandatory")
     private String lastName;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course")
     Set<Registration> registrations;
+
+    @Column(name = "isActive", nullable = false)
+    private boolean isActive = true;
 
     @Override
     public boolean equals(Object obj) {

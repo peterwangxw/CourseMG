@@ -23,8 +23,11 @@ public class Course {
     @NotBlank(message = "course name is mandatory")
     private String name;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "student")
     Set<Registration> registrations;
+
+    @Column(name = "isActive", nullable = false)
+    private boolean isActive = true;
 
     @Override
     public boolean equals(Object obj) {

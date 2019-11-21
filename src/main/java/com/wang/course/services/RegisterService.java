@@ -38,7 +38,7 @@ public class RegisterService {
         String hql = "select s " +
                 "from Student s, Registration r, Course c " +
                 "where s.id = r.student.id and r.course.id = c.id and c.name = :name " +
-                "and s.isActive = true and r.isActive = true and c.isActive = true" +
+                "and s.isActive = true and r.isActive = true and c.isActive = true " +
                 "order by s.firstName";
         TypedQuery<Student> query = entityManager.createQuery(hql, Student.class);
         query.setParameter("name", course);

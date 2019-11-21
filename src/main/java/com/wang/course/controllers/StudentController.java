@@ -31,6 +31,7 @@ public class StudentController extends BaseController{
     @PostMapping("/student")
     public Student create(@Valid @RequestBody Student student) {
         try {
+            student.setActive(true);
             Student savedStudent = registerService.studentRepository.saveAndFlush(student);
             return savedStudent;
         } catch (Exception e){
@@ -51,30 +52,13 @@ public class StudentController extends BaseController{
         try {
             Student deletedStudent = registerService.studentRepository.getOne(id);
             if (deletedStudent != null) {
-                registerService.studentRepository.deleteById(id);
+                deletedStudent.setActive(false);
+                registerService.studentRepository.save(deletedStudent);
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getStackTrace(e));
-        }
-    }
-
-    /**
-     * Fetch student by ID
-     *
-     * @param id
-     * @return
-     */
-    @ApiOperation("Retrieve a student by ID")
-    @GetMapping("/student/{id}")
-    public Student fetch(@PathVariable Long id) {
-        try {
-            Student student = registerService.studentRepository.getOne(id);
-            return student;
-        } catch (Exception e){
             log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getStackTrace(e));
         }
@@ -87,15 +71,9 @@ public class StudentController extends BaseController{
      */
     @ApiOperation("Retrieve all the students, or the students for a specified course")
     @GetMapping("/student")
-    public List<Student> retrieveAll(@RequestParam(value = "course", required = false) String course) {
+    public List<Student> search(@RequestParam(value = "course") String course) {
         try {
-            List<Student> students = null;
-            if (course == null || course.isEmpty()) {
-                // TODO... we may need implement pagination
-                students = registerService.studentRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
-            } else {
-                students = registerService.retrieveStudentForCourse(course);
-            }
+            List<Student> students = registerService.retrieveStudentForCourse(course);
             return students;
         } catch (Exception e){
             log.error(e.getMessage());

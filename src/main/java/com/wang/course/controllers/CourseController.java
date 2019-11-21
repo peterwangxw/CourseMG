@@ -30,6 +30,7 @@ public class CourseController extends BaseController{
     @PostMapping("/course")
     public Course create(@Valid @RequestBody Course course) {
         try {
+            course.setActive(true);
             Course savedCourse = registerService.courseRepository.saveAndFlush(course);
             return savedCourse;
         } catch (Exception e){
@@ -50,47 +51,13 @@ public class CourseController extends BaseController{
         try {
             Course deletedCourse = registerService.courseRepository.getOne(id);
             if (deletedCourse != null) {
-                registerService.courseRepository.deleteById(id);
+                deletedCourse.setActive(false);
+                registerService.courseRepository.saveAndFlush(deletedCourse);
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getStackTrace(e));
-        }
-    }
-
-    /**
-     * Fetch course by ID
-     *
-     * @param id
-     * @return
-     */
-    @ApiOperation("Retrieve a course by ID")
-    @GetMapping("/course/{id}")
-    public Course fetch(@PathVariable Long id) {
-        try {
-            Course course = registerService.courseRepository.getOne(id);
-            return course;
-        } catch (Exception e){
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getStackTrace(e));
-        }
-    }
-
-    /**
-     * Retrieve all the courses, we may need to add filter for pagination in the feature
-     *
-     * @return
-     */
-    @ApiOperation("Retrieve all the courses and sort by firstName")
-    @GetMapping("/course")
-    public List<Course> retrieveAll() {
-        try {
-            List<Course> courses = registerService.courseRepository.findAll();
-            return courses;
-        } catch (Exception e){
             log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getStackTrace(e));
         }
